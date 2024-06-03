@@ -20,83 +20,87 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.congntph34559.fpoly.app_com_tam.R
+import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 
 @Composable
 fun GetLayoutQuanLyCategoriesScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-
-            .background(Color(0xff252121)),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        Row(
+    ScaffoldCompose(onClickBack = { /*TODO*/ }) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, top = 26.dp)
+                .fillMaxSize()
 
-                .clickable {
-                     println("Row clicked")
-                },
-            verticalAlignment = Alignment.CenterVertically
+                .background(Color(0xff252121)),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.avatar),
-                contentDescription = "Logo",
+            Row(
                 modifier = Modifier
-                    .height(50.dp)
-                    .width(50.dp)
-            )
-            Text(
-                text = "Thêm loại món ăn",
-                color = Color.White
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, top = 26.dp)
-                .clickable {
-                    println("Row clicked")
-                },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.avatar),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .height(50.dp)
-                    .width(50.dp)
-            )
-            Text(
-                text = "Sửa loại món ăn",
-                color = Color.White
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, top = 26.dp)
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, top = 26.dp)
 
-                .clickable {
-                    println("Row clicked")
-                },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.avatar),
-                contentDescription = "Logo",
+                    .clickable {
+                        println("Row clicked")
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.avatar),
+                    contentDescription = "Logo",
+                    modifier = Modifier
+                        .height(50.dp)
+                        .width(50.dp)
+                )
+                Text(
+                    text = "Thêm loại món ăn",
+                    color = Color.White
+                )
+            }
+            Row(
                 modifier = Modifier
-                    .height(50.dp)
-                    .width(50.dp)
-            )
-            Text(
-                text = "Xoá loại món ăn",
-                color = Color.White
-            )
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, top = 26.dp)
+                    .clickable {
+                        println("Row clicked")
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.avatar),
+                    contentDescription = "Logo",
+                    modifier = Modifier
+                        .height(50.dp)
+                        .width(50.dp)
+                )
+                Text(
+                    text = "Sửa loại món ăn",
+                    color = Color.White
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, top = 26.dp)
+
+                    .clickable {
+                        println("Row clicked")
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.avatar),
+                    contentDescription = "Logo",
+                    modifier = Modifier
+                        .height(50.dp)
+                        .width(50.dp)
+                )
+                Text(
+                    text = "Xoá loại món ăn",
+                    color = Color.White
+                )
+            }
         }
     }
+
 
 }
 @Preview(showBackground = true, showSystemUi = true)
