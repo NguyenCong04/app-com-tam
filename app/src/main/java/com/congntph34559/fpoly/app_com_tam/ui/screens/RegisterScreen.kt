@@ -328,6 +328,21 @@ fun GetLayoutRegisterScreen(navController: NavHostController) {
         ) {
             Text(text = "Đăng ký")
         }
+        SpacerHeightCompose(height = 10)
+        Row {
+            Text(
+                text = "Bạn có tài khoản rồi!",
+                fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                color = Color.White
+            )
+            SpacerWidthCompose(width = 5)
+            Text(
+                text = "Đăng nhập",
+                fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                color = Color(0xffFE724C)
+            )
+
+        }
     }
 }
 
