@@ -38,7 +38,7 @@ import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 
 @Composable
-fun GetLayoutAddCategoriesScreen() {
+fun GetLayoutUpdateCategoriesScreen() {
     ScaffoldCompose(onClickBack = { /*TODO*/ }) {
         Column(
             modifier = Modifier
@@ -55,8 +55,8 @@ fun GetLayoutAddCategoriesScreen() {
                 value = LoaiMonAn,
                 onValueChange = { LoaiMonAn = it },
                 label = { Text("Nhập loại món ăn"
-                        ,  style = TextStyle(
-                            fontFamily = FontFamily(Font(R.font.cairo_regular))))},
+                ,  style = TextStyle(
+                        fontFamily = FontFamily(Font(R.font.cairo_regular))))},
                 modifier = Modifier
                     .fillMaxWidth(fraction = 1f)
                     .padding(start = 15.dp, end = 15.dp)
@@ -77,9 +77,9 @@ Spacer(modifier = Modifier.fillMaxHeight(0.3f))
 
             ) {
                 Text(
-                    text = "Thêm",
-
+                    text = "Cập Nhập",
                     fontFamily = FontFamily(Font(R.font.cairo_regular)),
+
                     fontWeight = FontWeight(600),
                     color = Color(0xffffffff),
                 )
@@ -91,6 +91,6 @@ Spacer(modifier = Modifier.fillMaxHeight(0.3f))
 }
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun GreetingLayoutAddCategoriesScreen() {
-    GetLayoutAddCategoriesScreen()
+fun GreetingLayoutUpdateCategoriesScreen() {
+    GetLayoutUpdateCategoriesScreen()
 }

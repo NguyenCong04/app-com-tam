@@ -65,10 +65,16 @@ fun GetLayoutEditCategoriesScreen() {
             )
             CategoryList(
                 categories = categories,
+                onDeleteClick = { category ->
+                    // Handle delete click for the selected category
+                    println("Deleting category: $category")
+                },
                 onEditClick = { category ->
                     // Handle edit click for the selected category
                     println("Editing category: $category")
-                }
+                },
+                showEditIcon = true,
+                showDeleteIcon = false
             )
         }
     }
@@ -77,7 +83,10 @@ fun GetLayoutEditCategoriesScreen() {
 @Composable
 fun CategoryItem(
     category: Category,
-    onEditClick: (Category) -> Unit
+    onEditClick: (Category) -> Unit,
+    onDeleteClick: (Category) -> Unit,
+    showDeleteIcon: Boolean,
+    showEditIcon: Boolean
 ) {
     Row(
         modifier = Modifier
@@ -90,26 +99,42 @@ fun CategoryItem(
     ) {
         Text(
             text = category.id.toString(),
-
             style = TextStyle(
                 fontWeight = FontWeight.Bold,
-
                 fontSize = 16.sp,
                 fontFamily = FontFamily(Font(R.font.cairo_regular)),
                 color = Color.White
             )
         )
-        Text(text = category.name,   fontFamily = FontFamily(Font(R.font.cairo_regular)), color = Color.White)
-        IconButton(
-            onClick = { onEditClick(category) }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.edit),
-                contentDescription = "Edit",
-                tint = Color.White,
-                modifier = Modifier
-                    .size(18.dp)
-            )
+        Text(
+            text = category.name,
+            fontFamily = FontFamily(Font(R.font.cairo_regular)),
+            color = Color.White
+        )
+        if (showEditIcon) {
+            IconButton(
+                onClick = { onEditClick(category) }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.edit),
+                    contentDescription = "Edit",
+                    tint = Color.White,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+
+        }
+        if (showDeleteIcon) {
+            IconButton(
+                onClick = { onDeleteClick(category) }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.delete),
+                    contentDescription = "Delete",
+                    tint = Color.White,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
         }
     }
 }
@@ -117,7 +142,10 @@ fun CategoryItem(
 @Composable
 fun CategoryList(
     categories: List<Category>,
-    onEditClick: (Category) -> Unit
+    onEditClick: (Category) -> Unit,
+    onDeleteClick: (Category) -> Unit,
+    showDeleteIcon: Boolean,
+    showEditIcon: Boolean
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(1f),
@@ -127,7 +155,10 @@ fun CategoryList(
         items(categories) { category ->
             CategoryItem(
                 category = category,
-                onEditClick = onEditClick
+                onEditClick = onEditClick,
+                onDeleteClick = onDeleteClick,
+                showDeleteIcon = showDeleteIcon,
+                showEditIcon = showEditIcon
             )
         }
     }
