@@ -47,7 +47,8 @@ fun GetLayoutLoginScreen(navController: NavHostController) {
     var context = LocalContext.current
     ScaffoldCompose(onClickBack = {
         Toast.makeText(context, "Login", Toast.LENGTH_SHORT).show()
-    }) {
+    })
+    {
         Column(
             modifier = Modifier
                 .fillMaxSize()
