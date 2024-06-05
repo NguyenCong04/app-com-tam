@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -51,14 +49,26 @@ import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GetLayoutUpdateMonScreen() {
-    var isExpanded by remember {
+    var isExpandedLoaiMon by remember {
+        mutableStateOf(false)
+    }
+    var isExpandedGia by remember {
         mutableStateOf(false)
     }
     var valueGia by remember {
         mutableStateOf("5 - 15")
     }
-
-
+    var valueMon by remember {
+        mutableStateOf("Món chính")
+    }
+    var listLoaiMon = listOf<String>(
+        "Món chính",
+        "Món phụ"
+    )
+    var listGia = listOf<String>(
+        "5 - 15",
+        "15 - 30"
+    )
 
     ScaffoldCompose(onClickBack = { /*TODO*/ }) {
 
@@ -71,8 +81,7 @@ fun GetLayoutUpdateMonScreen() {
                 .padding(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SpacerHeightCompose(height = 40)
-
+            SpacerHeightCompose(height = 20)
             Column(
                 modifier = Modifier
                     .size(150.dp, 150.dp)
@@ -89,6 +98,7 @@ fun GetLayoutUpdateMonScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+
                 Image(
                     painter = painterResource(id = R.drawable.image_demo),
                     contentDescription = null,
@@ -98,11 +108,174 @@ fun GetLayoutUpdateMonScreen() {
                             shape = RoundedCornerShape(8.dp)
                         ),
                     contentScale = ContentScale.Crop,
-
-                    )
+                )
 
             }
-            SpacerHeightCompose(height = 50)
+
+
+
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Loại Món",
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                    color = Color.White,
+
+                    )
+                ExposedDropdownMenuBox(
+                    expanded = isExpandedLoaiMon,
+                    onExpandedChange = {
+                        isExpandedLoaiMon = !isExpandedLoaiMon
+                    },
+                ) {
+                    TextField(
+                        value = valueMon,
+                        onValueChange = {},
+                        readOnly = true,
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth(1f),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedPlaceholderColor = Color.Black,
+                            unfocusedPlaceholderColor = Color.Gray,
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White
+                        ),
+                        placeholder = {
+                            Text(
+                                text = "Món chính",
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                                style = TextStyle(
+                                    fontFamily = FontFamily(Font(R.font.cairo_regular))
+                                ),
+                            )
+                        },
+                        shape = if (!isExpandedLoaiMon) RoundedCornerShape(size = 8.dp) else
+                            RoundedCornerShape(
+                                topEnd = 8.dp, topStart = 8.dp,
+                                bottomEnd = 0.dp, bottomStart = 0.dp
+                            ),
+                        textStyle = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.cairo_regular))
+                        ),
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowDown,
+                                contentDescription = null
+                            )
+                        }
+                    )
+                    DropdownMenu(
+                        expanded = isExpandedLoaiMon,
+                        onDismissRequest = { isExpandedLoaiMon = false },
+                        modifier = Modifier.padding(10.dp)
+                            .fillMaxWidth(0.92f),
+                    ) {
+                        listLoaiMon.forEach { item ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = item,
+                                        fontFamily = FontFamily(Font(R.font.cairo_regular))
+                                    )
+                                },
+                                onClick = {
+                                    valueMon = item
+                                    isExpandedLoaiMon = false
+                                },
+                            )
+                        }
+                    }
+                }
+
+            }
+            SpacerHeightCompose(height = 10)
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Giá",
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                    color = Color.White,
+
+                    )
+                ExposedDropdownMenuBox(
+                    expanded = isExpandedGia,
+                    onExpandedChange = { isExpandedGia = !isExpandedGia },
+                ) {
+                    TextField(
+                        value = "${valueGia}k",
+                        onValueChange = {},
+                        readOnly = true,
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth(1f),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedPlaceholderColor = Color.Black,
+                            unfocusedPlaceholderColor = Color.Gray,
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White
+                        ),
+                        placeholder = {
+                            Text(
+                                text = valueMon,
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                                style = TextStyle(
+                                    fontFamily = FontFamily(Font(R.font.cairo_regular))
+                                ),
+                            )
+                        },
+                        shape = if (!isExpandedGia) RoundedCornerShape(size = 8.dp) else
+                            RoundedCornerShape(
+                                topEnd = 8.dp, topStart = 8.dp,
+                                bottomEnd = 0.dp, bottomStart = 0.dp
+                            ),
+                        textStyle = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.cairo_regular))
+                        ),
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowDown,
+                                contentDescription = null
+                            )
+                        }
+                    )
+                    DropdownMenu(
+                        expanded = isExpandedGia,
+                        onDismissRequest = { isExpandedGia = false },
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .fillMaxWidth(0.92f),
+                    ) {
+                        listGia.forEach { item ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = item,
+                                        fontFamily = FontFamily(Font(R.font.cairo_regular))
+                                    )
+                                },
+                                onClick = {
+                                    valueGia = item
+                                    isExpandedGia = false
+                                },
+                            )
+                        }
+
+                    }
+                }
+
+            }
+            SpacerHeightCompose(height = 10)
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -142,97 +315,7 @@ fun GetLayoutUpdateMonScreen() {
 
                 )
             }
-            SpacerHeightCompose(height = 20)
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Giá",
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
-                    color = Color.White,
-
-                    )
-                ExposedDropdownMenuBox(
-                    expanded = isExpanded,
-                    onExpandedChange = { isExpanded = !isExpanded },
-                ) {
-                    TextField(
-                        value = "${valueGia}k",
-                        onValueChange = {},
-                        readOnly = true,
-                        modifier = Modifier
-                            .menuAnchor()
-                            .fillMaxWidth(1f),
-                        colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedPlaceholderColor = Color.Black,
-                            unfocusedPlaceholderColor = Color.Gray,
-                            unfocusedContainerColor = Color.White,
-                            focusedContainerColor = Color.White
-                        ),
-                        placeholder = {
-                            Text(
-                                text = valueGia,
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily(Font(R.font.cairo_regular)),
-                                style = TextStyle(
-                                    fontFamily = FontFamily(Font(R.font.cairo_regular))
-                                ),
-                            )
-                        },
-                        shape = if (!isExpanded) RoundedCornerShape(size = 8.dp) else
-                            RoundedCornerShape(
-                                topEnd = 8.dp, topStart = 8.dp,
-                                bottomEnd = 0.dp, bottomStart = 0.dp
-                            ),
-                        textStyle = TextStyle(
-                            fontFamily = FontFamily(Font(R.font.cairo_regular))
-                        ),
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowDown,
-                                contentDescription = null
-                            )
-                        }
-                    )
-                    DropdownMenu(
-                        expanded = isExpanded,
-                        onDismissRequest = { isExpanded = false },
-                        modifier = Modifier.width(363.dp)
-                    ) {
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = "5 - 15",
-                                    fontFamily = FontFamily(Font(R.font.cairo_regular))
-                                )
-                            },
-                            onClick = {
-                                valueGia = "5 - 15"
-                                isExpanded = false
-                            },
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = "15 - 30",
-                                    fontFamily = FontFamily(Font(R.font.cairo_regular))
-                                )
-                            },
-                            onClick = {
-                                valueGia = "15 - 30"
-                                isExpanded = false
-                            },
-                        )
-
-
-                    }
-                }
-
-            }
-            SpacerHeightCompose(height = 50)
+            SpacerHeightCompose(height = 40)
             Button(
                 onClick = { /*TODO*/ },
                 modifier = Modifier
@@ -243,7 +326,11 @@ fun GetLayoutUpdateMonScreen() {
                     containerColor = Color(0xffFE724C)
                 )
             ) {
-                Text(text = "Lưu")
+                Text(
+                    text = "Lưu",
+                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                    fontWeight = FontWeight(600)
+                )
             }
 
         }
