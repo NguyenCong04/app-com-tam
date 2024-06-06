@@ -30,10 +30,13 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerWidthCompose
+import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
 
 
 class MonDTO(var id: Int, var image: Int, var nameMon: String, var price: Float)
@@ -46,9 +49,11 @@ var listMon = mutableListOf<MonDTO>(
 )
 
 @Composable
-fun GetLayoutListMonUpdateScreen() {
+fun GetLayoutListMonUpdateScreen(navController: NavHostController) {
     var content = LocalContext.current
-    ScaffoldCompose(onClickBack = { /*TODO*/ }) {
+    ScaffoldCompose(onClickBack = {
+        navController.popBackStack()
+    }) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -66,9 +71,7 @@ fun GetLayoutListMonUpdateScreen() {
                     PostItemMon(
                         iconDelete = false, iconUpdate = true, it,
                         onClickIconUpdate = {
-                            Toast.makeText(
-                                content, "DELETE", Toast.LENGTH_SHORT
-                            ).show()
+                            navController.navigate(ROUTE_MAIN_NAV.updateMon.name)
                         }, onClickIconDelete = null
                     )
                 }
@@ -167,5 +170,5 @@ fun PostItemMon(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun GreetingGetLayoutListMonUpdateScreen() {
-    GetLayoutListMonUpdateScreen()
+    GetLayoutListMonUpdateScreen(navController = rememberNavController())
 }

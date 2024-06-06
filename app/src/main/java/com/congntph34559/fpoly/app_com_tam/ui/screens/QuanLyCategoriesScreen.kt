@@ -19,11 +19,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
+import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE
+import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
 
 @Composable
-fun GetLayoutQuanLyCategoriesScreen() {
+fun GetLayoutQuanLyCategoriesScreen(navHostController: NavHostController) {
     ScaffoldCompose(onClickBack = { /*TODO*/ }) {
         Column(
             modifier = Modifier
@@ -40,6 +44,7 @@ fun GetLayoutQuanLyCategoriesScreen() {
 
                     .clickable {
                         println("Row clicked")
+                        navHostController.navigate(ROUTE_MAIN_NAV.addCategory.name)
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -61,6 +66,7 @@ fun GetLayoutQuanLyCategoriesScreen() {
                     .padding(start = 20.dp, top = 26.dp)
                     .clickable {
                         println("Row clicked")
+                        navHostController.navigate(ROUTE_MAIN_NAV.listCategoryUpdate.name)
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -83,6 +89,9 @@ fun GetLayoutQuanLyCategoriesScreen() {
 
                     .clickable {
                         println("Row clicked")
+                        navHostController.navigate(
+                            ROUTE_MAIN_NAV.listCategoryDelete.name
+                        )
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -103,8 +112,9 @@ fun GetLayoutQuanLyCategoriesScreen() {
 
 
 }
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingLayoutQuanLyCategoriesScreen() {
-    GetLayoutQuanLyCategoriesScreen()
+    GetLayoutQuanLyCategoriesScreen(navHostController = rememberNavController())
 }
