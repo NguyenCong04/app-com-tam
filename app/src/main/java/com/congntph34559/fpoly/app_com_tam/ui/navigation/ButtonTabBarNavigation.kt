@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +41,8 @@ import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutHoiTroScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutHomeScreen
+import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutManagerMonScreen
+import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutQuanLyCategoriesScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutQuanLyScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutThongKeScreen
 
@@ -47,6 +50,8 @@ enum class ROUTE {
     home,
     thongke,
     quanly,
+    detail_ql_loai_mon,
+    detail_ql_mon,
     hoitro,
 }
 
@@ -54,7 +59,7 @@ enum class ROUTE {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GetLayoutButtonTopBarNavigation(navHostController: NavHostController) {
-    var isSelected by remember {
+    var isSelected by rememberSaveable {
         mutableStateOf(ROUTE.home.name)
     }
     var navController = rememberNavController()
@@ -244,11 +249,25 @@ fun GetLayoutButtonTopBarNavigation(navHostController: NavHostController) {
             SpacerHeightCompose(height = 1)
             NavHost(
                 navController = navController,
-                startDestination = ROUTE.home.name
+                startDestination = isSelected
             ) {
-                composable(ROUTE.home.name) { GetLayoutHomeScreen(navHostController) }
+                composable(ROUTE.home.name) {
+                    GetLayoutHomeScreen(
+                        navHostController
+                    )
+                }
                 composable(ROUTE.thongke.name) { GetLayoutThongKeScreen() }
-                composable(ROUTE.quanly.name) { GetLayoutQuanLyScreen() }
+                composable(ROUTE.quanly.name) {
+                    GetLayoutQuanLyScreen(
+                        navController
+                    )
+                }
+                composable(ROUTE.detail_ql_loai_mon.name) {
+                    GetLayoutQuanLyCategoriesScreen(navHostController)
+                }
+                composable(ROUTE.detail_ql_mon.name) {
+                    GetLayoutManagerMonScreen(navHostController)
+                }
                 composable(ROUTE.hoitro.name) { GetLayoutHoiTroScreen() }
             }
 

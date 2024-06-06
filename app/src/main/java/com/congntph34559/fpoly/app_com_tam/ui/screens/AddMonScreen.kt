@@ -43,6 +43,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
@@ -75,7 +77,7 @@ fun Modifier.dashedBorder(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GetLayoutAddMonScreen() {
+fun GetLayoutAddMonScreen(navController: NavHostController) {
     var isExpandedLoaiMon by remember {
         mutableStateOf(false)
     }
@@ -100,7 +102,9 @@ fun GetLayoutAddMonScreen() {
 
 
 
-    ScaffoldCompose(onClickBack = { /*TODO*/ }) {
+    ScaffoldCompose(onClickBack = {
+        navController.popBackStack()
+    }) {
 
         Column(
             modifier = Modifier
@@ -371,5 +375,5 @@ fun GetLayoutAddMonScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingAddMonScreen() {
-    GetLayoutAddMonScreen()
+    GetLayoutAddMonScreen(navController = rememberNavController())
 }
