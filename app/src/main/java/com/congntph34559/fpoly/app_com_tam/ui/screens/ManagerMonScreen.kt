@@ -21,11 +21,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
+import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE
+import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
 
 @Composable
-fun GetLayoutManagerMonScreen() {
+fun GetLayoutManagerMonScreen(navHostController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -38,12 +42,14 @@ fun GetLayoutManagerMonScreen() {
                 .padding(15.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().selectable(
-                    selected = true,
-                    onClick = {
-
-                    }
-                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .selectable(
+                        selected = true,
+                        onClick = {
+                            navHostController.navigate(ROUTE_MAIN_NAV.addMon.name)
+                        }
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -62,12 +68,15 @@ fun GetLayoutManagerMonScreen() {
             }
             SpacerHeightCompose(height = 15)
             Row(
-                modifier = Modifier.fillMaxWidth().selectable(
-                    selected = true,
-                    onClick = {
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .selectable(
+                        selected = true,
+                        onClick = {
+                            navHostController.navigate(ROUTE_MAIN_NAV.listMonUpdate.name)
 
-                    }
-                ),
+                        }
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -86,12 +95,14 @@ fun GetLayoutManagerMonScreen() {
             }
             SpacerHeightCompose(height = 15)
             Row(
-                modifier = Modifier.fillMaxWidth().selectable(
-                    selected = true,
-                    onClick = {
-
-                    }
-                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .selectable(
+                        selected = true,
+                        onClick = {
+                            navHostController.navigate(ROUTE_MAIN_NAV.listMonDelete.name)
+                        }
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -118,5 +129,5 @@ fun GetLayoutManagerMonScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingManagerMonScreen() {
-    GetLayoutManagerMonScreen()
+    GetLayoutManagerMonScreen(navHostController = rememberNavController())
 }

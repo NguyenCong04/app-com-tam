@@ -41,6 +41,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
@@ -48,7 +50,7 @@ import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GetLayoutUpdateMonScreen() {
+fun GetLayoutUpdateMonScreen(navController: NavHostController) {
     var isExpandedLoaiMon by remember {
         mutableStateOf(false)
     }
@@ -70,7 +72,9 @@ fun GetLayoutUpdateMonScreen() {
         "15 - 30"
     )
 
-    ScaffoldCompose(onClickBack = { /*TODO*/ }) {
+    ScaffoldCompose(onClickBack = {
+        navController.popBackStack()
+    }) {
 
         Column(
             modifier = Modifier
@@ -173,7 +177,8 @@ fun GetLayoutUpdateMonScreen() {
                     DropdownMenu(
                         expanded = isExpandedLoaiMon,
                         onDismissRequest = { isExpandedLoaiMon = false },
-                        modifier = Modifier.padding(10.dp)
+                        modifier = Modifier
+                            .padding(10.dp)
                             .fillMaxWidth(0.92f),
                     ) {
                         listLoaiMon.forEach { item ->
@@ -342,5 +347,5 @@ fun GetLayoutUpdateMonScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingUpdateMonScreen() {
-    GetLayoutUpdateMonScreen()
+    GetLayoutUpdateMonScreen(navController = rememberNavController())
 }
