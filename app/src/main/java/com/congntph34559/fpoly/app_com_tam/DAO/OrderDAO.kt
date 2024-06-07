@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.congntph34559.fpoly.app_com_tam.Model.OrderModel
-import com.congntph34559.fpoly.app_com_tam.Model.OrderDetailModel
 
 @Dao
 interface OrderDAO {
