@@ -16,8 +16,10 @@ import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutLoginScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutRegisterScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutUpdateCategoriesScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutUpdateMonScreen
+import com.congntph34559.fpoly.app_com_tam.ui.screens.welcome.GetLayoutWelcome
 
 enum class ROUTE_MAIN_NAV {
+    welcome,
     login,
     register,
     home,
@@ -38,8 +40,13 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = ROUTE_MAIN_NAV.login.name
+        startDestination = ROUTE_MAIN_NAV.welcome.name
     ) {
+        composable(ROUTE_MAIN_NAV.welcome.name) {
+            GetLayoutWelcome(
+                navController
+            )
+        }
         composable(ROUTE_MAIN_NAV.login.name) {
             GetLayoutLoginScreen(
                 navController
