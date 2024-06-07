@@ -15,6 +15,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +31,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.congntph34559.fpoly.app_com_tam.R
@@ -47,22 +50,42 @@ fun GetLayoutUpdateCategoriesScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            var LoaiMonAn by remember { mutableStateOf("") }
-
-// TextField for input
-            OutlinedTextField(
-                value = LoaiMonAn,
-                onValueChange = { LoaiMonAn = it },
-                label = { Text("Nhập loại món ăn"
-                ,  style = TextStyle(
-                        fontFamily = FontFamily(Font(R.font.cairo_regular))))},
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(fraction = 1f)
-                    .padding(start = 15.dp, end = 15.dp)
-                    .height(65.dp)
-                    .background(color = Color.White) // Set background color to white
-                       , shape = RoundedCornerShape(4.dp)
-            ) // Add rounded corners
+                    .padding(15.dp).fillMaxWidth()
+            ) {
+
+                TextField(
+                    value = "",
+                    onValueChange = {},
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedPlaceholderColor = Color.Black,
+                        unfocusedPlaceholderColor = Color.Gray,
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White
+                    ),
+                    placeholder = {
+                        Text(
+                            text = "Nhập loại món ăn",
+                            color = Color.Black,
+                            fontWeight = FontWeight(600),
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                            style = TextStyle(
+                                fontFamily = FontFamily(Font(R.font.cairo_regular))
+                            )
+                        )
+                    },
+                    shape = RoundedCornerShape(size = 8.dp),
+                    textStyle = TextStyle(
+                        fontFamily = FontFamily(Font(R.font.cairo_regular))
+                    )
+
+                )
+            }
 Spacer(modifier = Modifier.fillMaxHeight(0.3f))
             Button(
                 onClick = {

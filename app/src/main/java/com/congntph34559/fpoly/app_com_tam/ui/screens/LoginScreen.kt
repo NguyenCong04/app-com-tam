@@ -3,8 +3,10 @@ package com.congntph34559.fpoly.app_com_tam.ui.screens
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +20,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -39,124 +45,153 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
+import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
+import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerWidthCompose
 import com.congntph34559.fpoly.app_com_tam.ui.navigation.GetLayoutButtonTopBarNavigation
 import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
 
 @Composable
 fun GetLayoutLoginScreen(navController: NavHostController) {
     var context = LocalContext.current
-    ScaffoldCompose(onClickBack = {
-        Toast.makeText(context, "Login", Toast.LENGTH_SHORT).show()
-    })
-    {
+
         Column(
-            modifier = Modifier
-                .fillMaxSize()
+                    modifier = Modifier
+                    .fillMaxSize()
                 .background(
                     color = Color(0xff252121)
-                ),
+                )
+                .padding(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-            text = "Đăng Nhập",
-            color = Color.White,
-            fontSize = 20.sp,
-            fontFamily = FontFamily.Serif
-        )
             Image(
-                painter = painterResource(id = R.drawable.avatar),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .height(200.dp)
-                    .width(200.dp)
+                painter = painterResource(id = R.drawable.avatar_max),
+                contentDescription = null,
+                modifier = Modifier.size(150.dp, 150.dp)
             )
             Text(
-                text = "Nhập User Name",
-                color = Color.White,
-                fontStyle = FontStyle.Italic,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 26.dp, end = 26.dp)
-                    .align(Alignment.Start)
+                text = "Đăng Nhập",
+                fontSize = 25.sp,
+                fontFamily = FontFamily(Font(R.font.cairo_bold)),
+                color = Color.White
             )
-            var userName by remember { mutableStateOf("") }
-
-            // TextField for input
-            OutlinedTextField(
-                value = userName,
-                onValueChange = { userName = it },
-                label = { Text("Nhập User Name") },
-                modifier = Modifier
-                    . fillMaxWidth(fraction = 1f)
-                    .padding(start = 26.dp, end = 26.dp)
-                    .height(65.dp)
-            )
-            Text(
-                text = "Nhập Pass Word",
-                color = Color.White,
-                fontStyle = FontStyle.Italic,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 26.dp, end = 26.dp)
-                    .align(Alignment.Start)
-            )
-            var passWord by remember { mutableStateOf("") }
-
-            // TextField for input
-            OutlinedTextField(
-                value = passWord,
-                onValueChange = { passWord = it },
-                label = { Text("Nhập Pass Word") },
-                modifier = Modifier
-                    . fillMaxWidth(fraction = 1f)
-                    .padding(start = 26.dp, end = 26.dp)
-                    .height(65.dp)
-            )
-
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(
-                    text = "Forgot Password",
-                    fontFamily = FontFamily.Serif,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight(600),
-                    color = Color(0xffffffff),
-                    modifier = Modifier.padding(top = 15.dp, bottom = 15.dp)
+                    text = "Email",
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                    color = Color.White,
+                    fontWeight = FontWeight(600)
                 )
-                Button(
-                    onClick = {
-                        navController.navigate("home")
+                TextField(
+                    value = "",
+                    onValueChange = {},
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedPlaceholderColor = Color.Black,
+                        unfocusedPlaceholderColor = Color.Gray,
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White
+                    ),
+                    placeholder = {
+                        Text(
+                            text = "Enter your email",
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                            style = TextStyle(
+                                fontFamily = FontFamily(Font(R.font.cairo_regular))
+                            )
+                        )
                     },
-                    modifier = Modifier.size(290.dp, 50.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xffffffff)
-                    ),
-                    shape = RoundedCornerShape(8.dp)
-
-                ) {
-                    Text(
-                        text = "Log in",
-                        fontFamily = FontFamily.Serif,
-                        fontWeight = FontWeight(600),
-                        color = Color(0xff000000),
+                    shape = RoundedCornerShape(size = 8.dp),
+                    textStyle = TextStyle(
+                        fontFamily = FontFamily(Font(R.font.cairo_regular))
                     )
-                }
+
+                )
+            }
+
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(
-                    text = "SIGN UP",
-                    modifier = Modifier.padding(top = 20.dp).selectable(
-                        selected = true,
-                        onClick = {
-                            navController.navigate("signup")
-                        }
+                    text = "Password",
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                    color = Color.White,
+                    fontWeight = FontWeight(600)
+                )
+                TextField(
+                    value = "",
+                    onValueChange = {},
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedPlaceholderColor = Color.Black,
+                        unfocusedPlaceholderColor = Color.Gray,
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White
                     ),
-                    fontSize = 18.sp,
-                    fontFamily = FontFamily.Serif,
-                    color = Color(0xffffffff)
+                    placeholder = {
+                        Text(
+                            text = "Enter your password",
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                            style = TextStyle(
+                                fontFamily = FontFamily(Font(R.font.cairo_regular))
+                            )
+                        )
+                    },
+                    shape = RoundedCornerShape(size = 8.dp),
+                    textStyle = TextStyle(
+                        fontFamily = FontFamily(Font(R.font.cairo_regular))
+                    )
+
+                )
+            }
+
+            SpacerHeightCompose(height = 30)
+            Button(
+                onClick = {  navController.navigate("home") },
+                modifier = Modifier
+                    .width(170.dp)
+                    .height(45.dp),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xffFE724C)
+                )
+            ) {
+                Text(text = "Đăng Nhập")
+            }
+            SpacerHeightCompose(height = 10)
+            Row {
+                Text(
+                    text = "Bạn chưa có tài khoản",
+                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                    color = Color.White
+                )
+                SpacerWidthCompose(width = 5)
+                Text(
+                    text = "Đăng Ký",
+                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                    color = Color(0xffFE724C),
+                            modifier = Modifier
+                            .clickable {
+                        // Hành động khi người dùng nhấp vào nút
+                        // Ví dụ: chuyển đến trang đăng ký
+                        navController.navigate("register")
+                    }
                 )
 
-
-                   }
+            }
+        }
     }
-}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
