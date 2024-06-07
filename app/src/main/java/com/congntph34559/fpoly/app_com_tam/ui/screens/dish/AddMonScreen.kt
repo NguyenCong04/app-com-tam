@@ -63,7 +63,6 @@ import androidx.navigation.compose.rememberNavController
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
-import com.google.accompanist.insets.ProvideWindowInsets
 
 fun Modifier.dashedBorder(
     strokeWidth: Dp,
