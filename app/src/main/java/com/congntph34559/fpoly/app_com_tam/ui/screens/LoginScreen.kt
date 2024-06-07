@@ -54,143 +54,143 @@ import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
 fun GetLayoutLoginScreen(navController: NavHostController) {
     var context = LocalContext.current
 
-        Column(
-                    modifier = Modifier
-                    .fillMaxSize()
-                .background(
-                    color = Color(0xff252121)
-                )
-                .padding(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.avatar_max),
-                contentDescription = null,
-                modifier = Modifier.size(150.dp, 150.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                color = Color(0xff252121)
             )
+            .padding(15.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.avatar_max),
+            contentDescription = null,
+            modifier = Modifier.size(150.dp, 150.dp)
+        )
+        Text(
+            text = "Đăng Nhập",
+            fontSize = 25.sp,
+            fontFamily = FontFamily(Font(R.font.cairo_bold)),
+            color = Color.White
+        )
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(
-                text = "Đăng Nhập",
-                fontSize = 25.sp,
-                fontFamily = FontFamily(Font(R.font.cairo_bold)),
+                text = "Email",
+                fontSize = 16.sp,
+                fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                color = Color.White,
+                fontWeight = FontWeight(600)
+            )
+            TextField(
+                value = "",
+                onValueChange = {},
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedPlaceholderColor = Color.Black,
+                    unfocusedPlaceholderColor = Color.Gray,
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White
+                ),
+                placeholder = {
+                    Text(
+                        text = "Enter your email",
+                        fontSize = 15.sp,
+                        fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.cairo_regular))
+                        )
+                    )
+                },
+                shape = RoundedCornerShape(size = 8.dp),
+                textStyle = TextStyle(
+                    fontFamily = FontFamily(Font(R.font.cairo_regular))
+                )
+
+            )
+        }
+        SpacerHeightCompose(height = 15)
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Password",
+                fontSize = 16.sp,
+                fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                color = Color.White,
+                fontWeight = FontWeight(600)
+            )
+            TextField(
+                value = "",
+                onValueChange = {},
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedPlaceholderColor = Color.Black,
+                    unfocusedPlaceholderColor = Color.Gray,
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White
+                ),
+                placeholder = {
+                    Text(
+                        text = "Enter your password",
+                        fontSize = 15.sp,
+                        fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.cairo_regular))
+                        )
+                    )
+                },
+                shape = RoundedCornerShape(size = 8.dp),
+                textStyle = TextStyle(
+                    fontFamily = FontFamily(Font(R.font.cairo_regular))
+                )
+
+            )
+        }
+
+        SpacerHeightCompose(height = 30)
+        Button(
+            onClick = { navController.navigate("home") },
+            modifier = Modifier
+                .width(170.dp)
+                .height(45.dp),
+            shape = RoundedCornerShape(10.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xffFE724C)
+            )
+        ) {
+            Text(text = "Đăng Nhập")
+        }
+        SpacerHeightCompose(height = 10)
+        Row {
+            Text(
+                text = "Bạn chưa có tài khoản",
+                fontFamily = FontFamily(Font(R.font.cairo_regular)),
                 color = Color.White
             )
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Email",
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
-                    color = Color.White,
-                    fontWeight = FontWeight(600)
-                )
-                TextField(
-                    value = "",
-                    onValueChange = {},
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedPlaceholderColor = Color.Black,
-                        unfocusedPlaceholderColor = Color.Gray,
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White
-                    ),
-                    placeholder = {
-                        Text(
-                            text = "Enter your email",
-                            fontSize = 15.sp,
-                            fontFamily = FontFamily(Font(R.font.cairo_regular)),
-                            style = TextStyle(
-                                fontFamily = FontFamily(Font(R.font.cairo_regular))
-                            )
-                        )
-                    },
-                    shape = RoundedCornerShape(size = 8.dp),
-                    textStyle = TextStyle(
-                        fontFamily = FontFamily(Font(R.font.cairo_regular))
-                    )
-
-                )
-            }
-
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Password",
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
-                    color = Color.White,
-                    fontWeight = FontWeight(600)
-                )
-                TextField(
-                    value = "",
-                    onValueChange = {},
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedPlaceholderColor = Color.Black,
-                        unfocusedPlaceholderColor = Color.Gray,
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White
-                    ),
-                    placeholder = {
-                        Text(
-                            text = "Enter your password",
-                            fontSize = 15.sp,
-                            fontFamily = FontFamily(Font(R.font.cairo_regular)),
-                            style = TextStyle(
-                                fontFamily = FontFamily(Font(R.font.cairo_regular))
-                            )
-                        )
-                    },
-                    shape = RoundedCornerShape(size = 8.dp),
-                    textStyle = TextStyle(
-                        fontFamily = FontFamily(Font(R.font.cairo_regular))
-                    )
-
-                )
-            }
-
-            SpacerHeightCompose(height = 30)
-            Button(
-                onClick = {  navController.navigate("home") },
+            SpacerWidthCompose(width = 5)
+            Text(
+                text = "Đăng Ký",
+                fontFamily = FontFamily(Font(R.font.cairo_regular)),
+                color = Color(0xffFE724C),
                 modifier = Modifier
-                    .width(170.dp)
-                    .height(45.dp),
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xffFE724C)
-                )
-            ) {
-                Text(text = "Đăng Nhập")
-            }
-            SpacerHeightCompose(height = 10)
-            Row {
-                Text(
-                    text = "Bạn chưa có tài khoản",
-                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
-                    color = Color.White
-                )
-                SpacerWidthCompose(width = 5)
-                Text(
-                    text = "Đăng Ký",
-                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
-                    color = Color(0xffFE724C),
-                            modifier = Modifier
-                            .clickable {
+                    .clickable {
                         // Hành động khi người dùng nhấp vào nút
                         // Ví dụ: chuyển đến trang đăng ký
                         navController.navigate("register")
                     }
-                )
+            )
 
-            }
         }
     }
+}
 
 
 @Preview(showBackground = true, showSystemUi = true)
