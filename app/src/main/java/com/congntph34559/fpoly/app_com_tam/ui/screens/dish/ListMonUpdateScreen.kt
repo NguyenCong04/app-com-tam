@@ -1,8 +1,7 @@
 @file:Suppress("DEPRECATED_IDENTITY_EQUALS")
 
-package com.congntph34559.fpoly.app_com_tam.ui.screens
+package com.congntph34559.fpoly.app_com_tam.ui.screens.dish
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

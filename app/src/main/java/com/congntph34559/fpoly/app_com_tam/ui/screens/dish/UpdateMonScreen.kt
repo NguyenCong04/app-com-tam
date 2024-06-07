@@ -1,5 +1,13 @@
-package com.congntph34559.fpoly.app_com_tam.ui.screens
+package com.congntph34559.fpoly.app_com_tam.ui.screens.dish
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,9 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,17 +38,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -49,46 +57,21 @@ import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
 
-fun Modifier.dashedBorder(
-    strokeWidth: Dp,
-    color: Color,
-    cornerRadius: Dp,
-    dashLength: Dp
-) = this.then(
-    Modifier.drawBehind {
-        val stroke = Stroke(
-            width = strokeWidth.toPx(),
-            pathEffect = PathEffect.dashPathEffect(
-                floatArrayOf(dashLength.toPx(), dashLength.toPx()), 0f
-            )
-        )
-        drawRoundRect(
-            color = color,
-            topLeft = androidx.compose.ui.geometry.Offset(0f, 0f),
-            size = size,
-            cornerRadius = CornerRadius(
-                cornerRadius.toPx(),
-                cornerRadius.toPx()
-            ),
-            style = stroke
-        )
-    }
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GetLayoutAddMonScreen(navController: NavHostController) {
+fun GetLayoutUpdateMonScreen(navController: NavHostController) {
     var isExpandedLoaiMon by remember {
         mutableStateOf(false)
     }
     var isExpandedGia by remember {
         mutableStateOf(false)
     }
-    var valueMon by remember {
-        mutableStateOf("Món chính")
-    }
     var valueGia by remember {
         mutableStateOf("5 - 15")
+    }
+    var valueMon by remember {
+        mutableStateOf("Món chính")
     }
     var listLoaiMon = listOf<String>(
         "Món chính",
@@ -98,6 +81,20 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
         "5 - 15",
         "15 - 30"
     )
+    //Open Gallery
+    var imageUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+    var context = LocalContext.current
+    var bitmap by remember {
+        mutableStateOf<Bitmap?>(null)
+    }
+    val launcher = rememberLauncherForActivityResult(
+        contract =
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+    }
 
 
 
@@ -128,24 +125,58 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
                         color = Color(0xff4E4B66),
                         cornerRadius = 8.dp,
                         dashLength = 8.dp
+                    )
+                    .selectable(
+                        selected = true,
+                        onClick = {
+                            launcher.launch("image/*")
+                        }
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier.size(25.dp, 25.dp),
-                    tint = Color(0xff4E4B66),
-                )
-                Text(
-                    text = "Thêm hình ảnh",
-                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
-                    fontSize = 14.sp,
-                    color = Color(0xff4E4B66)
-                )
 
+//                Image(
+//                    painter = painterResource(id = R.drawable.image_demo),
+//                    contentDescription = null,
+//                    modifier = Modifier
+//                        .width(145.dp)
+//                        .clip(
+//                            shape = RoundedCornerShape(8.dp)
+//                        ),
+//                    contentScale = ContentScale.Crop,
+//                )
+                imageUri?.let {
+                    if (Build.VERSION.SDK_INT < 28) {
+                        bitmap = MediaStore.Images.Media.getBitmap(
+                            context
+                                .contentResolver, it
+                        )
+                    } else {
+                        val source = ImageDecoder.createSource(
+                            context
+                                .contentResolver, it
+                        )
+                        bitmap = ImageDecoder.decodeBitmap(source)
+                    }
+                    bitmap?.let { btm ->
+                        Image(
+                            bitmap = btm.asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(145.dp)
+                                .height(145.dp)
+                                .clip(
+                                    shape = RoundedCornerShape(8.dp)
+                                ),
+                            contentScale = ContentScale.Crop,
+                        )
+                    }
+                }
             }
+
+
+
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -187,7 +218,9 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
                                 ),
                             )
                         },
-                        shape = if (!isExpandedLoaiMon) RoundedCornerShape(size = 8.dp) else
+                        shape = if (!isExpandedLoaiMon) RoundedCornerShape(
+                            size = 8.dp
+                        ) else
                             RoundedCornerShape(
                                 topEnd = 8.dp, topStart = 8.dp,
                                 bottomEnd = 0.dp, bottomStart = 0.dp
@@ -303,6 +336,7 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
                                 },
                             )
                         }
+
                     }
                 }
 
@@ -359,11 +393,10 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
                 )
             ) {
                 Text(
-                    text = "Thêm",
+                    text = "Lưu",
                     fontFamily = FontFamily(Font(R.font.cairo_regular)),
                     fontWeight = FontWeight(600)
                 )
-
             }
 
         }
@@ -374,6 +407,6 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun GreetingAddMonScreen() {
-    GetLayoutAddMonScreen(navController = rememberNavController())
+fun GreetingUpdateMonScreen() {
+    GetLayoutUpdateMonScreen(navController = rememberNavController())
 }

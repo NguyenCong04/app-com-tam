@@ -1,4 +1,4 @@
-package com.congntph34559.fpoly.app_com_tam.ui.screens
+package com.congntph34559.fpoly.app_com_tam.ui.screens.dish
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

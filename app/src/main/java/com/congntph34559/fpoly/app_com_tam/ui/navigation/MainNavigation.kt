@@ -6,16 +6,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutAddCategoriesScreen
-import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutAddMonScreen
+import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutAddMonScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutDeleteCategoriesScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutDetailDonHang
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutEditCategoriesScreen
-import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutListMonDelete
-import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutListMonUpdateScreen
+import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutListMonDelete
+import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutListMonUpdateScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutLoginScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutRegisterScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutUpdateCategoriesScreen
-import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutUpdateMonScreen
+import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutUpdateMonScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.welcome.GetLayoutWelcome
 
 enum class ROUTE_MAIN_NAV {

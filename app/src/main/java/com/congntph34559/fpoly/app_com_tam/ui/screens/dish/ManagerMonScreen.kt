@@ -1,4 +1,4 @@
-package com.congntph34559.fpoly.app_com_tam.ui.screens
+package com.congntph34559.fpoly.app_com_tam.ui.screens.dish
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,7 +25,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
-import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE
 import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
 
 @Composable
