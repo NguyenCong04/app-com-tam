@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -28,7 +30,7 @@ import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
 
 @Composable
 fun GetLayoutQuanLyCategoriesScreen(navHostController: NavHostController) {
-    ScaffoldCompose(onClickBack = { /*TODO*/ }) {
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -57,8 +59,10 @@ fun GetLayoutQuanLyCategoriesScreen(navHostController: NavHostController) {
                 )
                 Text(
                     text = "Thêm loại món ăn",
-                    color = Color.White
-                )
+                    color = Color.White,
+                            fontFamily = FontFamily(Font(R.font.cairo_regular)),
+
+                    )
             }
             Row(
                 modifier = Modifier
@@ -79,8 +83,10 @@ fun GetLayoutQuanLyCategoriesScreen(navHostController: NavHostController) {
                 )
                 Text(
                     text = "Sửa loại món ăn",
-                    color = Color.White
-                )
+                    color = Color.White,
+                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
+
+                    )
             }
             Row(
                 modifier = Modifier
@@ -104,14 +110,15 @@ fun GetLayoutQuanLyCategoriesScreen(navHostController: NavHostController) {
                 )
                 Text(
                     text = "Xoá loại món ăn",
-                    color = Color.White
-                )
+                    color = Color.White,
+                    fontFamily = FontFamily(Font(R.font.cairo_regular)),
+
+
+                    )
             }
         }
     }
 
-
-}
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
