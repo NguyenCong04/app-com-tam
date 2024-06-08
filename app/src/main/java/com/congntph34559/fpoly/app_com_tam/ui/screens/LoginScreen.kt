@@ -19,6 +19,8 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -40,6 +42,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,6 +65,9 @@ import com.google.android.libraries.mapsplatform.transportation.consumer.model.R
 
 @Composable
 fun GetLayoutLoginScreen(navController: NavHostController, loginDAO: LoginDAO) {
+    var isShowHidePass by remember {
+        mutableStateOf(false)
+    }
 
     val loginViewModel = LoginViewModel(loginDAO)
     loginViewModel.insertSampleAdminIfNeeded()
@@ -188,10 +195,27 @@ fun GetLayoutLoginScreen(navController: NavHostController, loginDAO: LoginDAO) {
                     )
                 },
                 shape = RoundedCornerShape(size = 8.dp),
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            isShowHidePass = !isShowHidePass
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(
+                                id = if (!isShowHidePass) R.drawable.show
+                                else R.drawable.an
+                            ),
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp, 20.dp)
+                        )
+                    }
+                },
+                visualTransformation = if (!isShowHidePass) PasswordVisualTransformation()
+                else VisualTransformation.None,
                 textStyle = TextStyle(
                     fontFamily = FontFamily(Font(R.font.cairo_regular))
                 )
-
             )
         }
 
