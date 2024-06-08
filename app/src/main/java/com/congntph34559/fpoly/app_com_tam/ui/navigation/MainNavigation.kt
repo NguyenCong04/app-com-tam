@@ -2,9 +2,11 @@ package com.congntph34559.fpoly.app_com_tam.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutAddCategoriesScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutAddMonScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutDeleteCategoriesScreen
@@ -76,8 +78,20 @@ fun AppNavigation() {
         composable(ROUTE_MAIN_NAV.listCategoryDelete.name) {
             GetLayoutDeleteCategoriesScreen(navController)
         }
-        composable(ROUTE_MAIN_NAV.updateCategory.name) {
-            GetLayoutUpdateCategoriesScreen(navController)
+        composable(
+
+            "${  ROUTE_MAIN_NAV.updateCategory.name }/{IdLoaiMon}",
+                arguments = listOf(
+                navArgument(name = "IdLoaiMon") {
+                    type = NavType.IntType
+                }
+                )
+        )
+        {backStackEntry->
+            GetLayoutUpdateCategoriesScreen(
+                navController,
+                backStackEntry.arguments?.getInt("IdLoaiMon",0)
+            )
         }
 
         composable(ROUTE_MAIN_NAV.addMon.name) {

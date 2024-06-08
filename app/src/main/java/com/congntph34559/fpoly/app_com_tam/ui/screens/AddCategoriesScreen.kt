@@ -1,5 +1,6 @@
 package com.congntph34559.fpoly.app_com_tam.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -34,11 +36,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
+import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
+import com.congntph34559.fpoly.app_com_tam.Model.LoaiMonModel
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 
 @Composable
 fun GetLayoutAddCategoriesScreen(navController: NavHostController) {
+    var context = LocalContext.current
+    var db = Room.databaseBuilder(
+        context,
+        AppDatabase::class.java,
+        "Loaimon"
+    ).allowMainThreadQueries().build()
+    var tenLoaiMon by remember {
+        mutableStateOf("")
+    }
     ScaffoldCompose(onClickBack = {
         navController.popBackStack()
     }) {
@@ -54,10 +68,9 @@ fun GetLayoutAddCategoriesScreen(navController: NavHostController) {
                 modifier = Modifier
                 .padding(15.dp).fillMaxWidth()
             ) {
-
                 TextField(
-                    value = "",
-                    onValueChange = {},
+                    value = tenLoaiMon,
+                    onValueChange = {tenLoaiMon=it},
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
@@ -89,7 +102,18 @@ fun GetLayoutAddCategoriesScreen(navController: NavHostController) {
 Spacer(modifier = Modifier.fillMaxHeight(0.3f))
             Button(
                 onClick = {
-                   // navController.navigate("home")
+                  if(
+                      tenLoaiMon.isNotBlank()
+                  ){
+                      db.loaiMonDAO().insert(
+                          LoaiMonModel(
+                              tenLoaiMon=tenLoaiMon
+                          )
+                      )
+                      Toast.makeText(context,"Thêm loại món thành công", Toast.LENGTH_SHORT
+                      ).show()
+                   //   navController.navigate("detail_ql_loai_mon")
+                  }
                 },
                 modifier = Modifier.size(170.dp, 50.dp),
                 colors = ButtonDefaults.buttonColors(
