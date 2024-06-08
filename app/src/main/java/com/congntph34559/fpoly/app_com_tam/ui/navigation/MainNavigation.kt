@@ -1,10 +1,13 @@
 package com.congntph34559.fpoly.app_com_tam.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
+import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutAddCategoriesScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutAddMonScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutDeleteCategoriesScreen
@@ -48,10 +51,11 @@ fun AppNavigation() {
             )
         }
         composable(ROUTE_MAIN_NAV.login.name) {
-            GetLayoutLoginScreen(
-                navController
-            )
+            val context = LocalContext.current
+            val loginDAO = Room.databaseBuilder(context, AppDatabase::class.java, "app-database").build().LoginDAO()
+            GetLayoutLoginScreen(navController = navController, loginDAO = loginDAO)
         }
+
         composable(ROUTE_MAIN_NAV.register.name) {
             GetLayoutRegisterScreen(
                 navController
