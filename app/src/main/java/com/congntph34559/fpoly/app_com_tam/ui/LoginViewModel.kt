@@ -31,12 +31,13 @@ class LoginViewModel(private val dao: LoginDAO) : ViewModel() {
             dao.getAll().collect{
                 users = it
                 if (users.isEmpty()) {
-                    dao.insertLogin(LoginModel(userName = "admin1", password = "123", "admin1@gmail.com",0))
-                    dao.insertLogin(LoginModel(userName = "admin2", password = "456", "admin2@gmail.com",0))
+                    dao.insertLogin(LoginModel(userName = "cong1", password = "123", "cong1@gmail.com",0))
+                    dao.insertLogin(LoginModel(userName = "tam2", password = "456", "tam2@gmail.com",0))
                 }
             }
         }
     }
+
 
 
     fun login(username: String, password: String) {

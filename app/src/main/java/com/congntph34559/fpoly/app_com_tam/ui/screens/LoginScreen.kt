@@ -221,7 +221,7 @@ fun GetLayoutLoginScreen(navController: NavHostController, loginDAO: LoginDAO) {
 
         SpacerHeightCompose(height = 30)
         Button(
-            onClick = { navController.navigate("home") },
+            onClick = {  loginViewModel.login(username, password) },
             modifier = Modifier
                 .width(170.dp)
                 .height(45.dp),
