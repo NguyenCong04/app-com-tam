@@ -74,6 +74,9 @@ dependencies {
 
     implementation ("androidx.room:room-runtime:2.6.1")
     kapt ("androidx.room:room-compiler:2.6.1")
+    implementation ("io.coil-kt:coil-compose:1.4.0")
+
+
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
     implementation ("androidx.compose.runtime:runtime-livedata:1.2.1")
     implementation("androidx.room:room-ktx:$room_version")

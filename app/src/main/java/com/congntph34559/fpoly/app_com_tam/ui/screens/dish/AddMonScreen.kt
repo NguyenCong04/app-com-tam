@@ -1,16 +1,19 @@
 package com.congntph34559.fpoly.app_com_tam.ui.screens.dish
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +31,8 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuBoxScope
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -36,10 +41,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
@@ -49,7 +54,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -59,10 +63,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
+import com.congntph34559.fpoly.app_com_tam.Model.MonAnModel
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 
 fun Modifier.dashedBorder(
     strokeWidth: Dp,
@@ -90,29 +98,51 @@ fun Modifier.dashedBorder(
     }
 )
 
+fun saveBitmapToInternalStorage(
+    context: Context,
+    bitmap: Bitmap,
+    imageName: String
+): String {
+    val directory = context.filesDir
+    val file = File(directory, "$imageName.png")
+    val fileOutputStream = FileOutputStream(file)
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+    fileOutputStream.close()
+    return file.absolutePath
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GetLayoutAddMonScreen(navController: NavHostController) {
+fun GetLayoutAddMonScreen(
+    navController: NavHostController,
+    viewModel: MonAnViewModel
+) {
     var isExpandedLoaiMon by remember {
         mutableStateOf(false)
     }
     var isExpandedGia by remember {
         mutableStateOf(false)
     }
-    var valueMon by remember {
+    var valueLoaiMon by remember {
         mutableStateOf("Món chính")
     }
+    var namePro by remember {
+        mutableStateOf("")
+    }
     var valueGia by remember {
-        mutableStateOf("5 - 15")
+        mutableStateOf("15 - 50")
     }
     var listLoaiMon = listOf<String>(
         "Món chính",
         "Món phụ"
     )
     var listGia = listOf<String>(
-        "5 - 15",
-        "15 - 30"
+        "15",
+        "25",
+        "40",
+        "50",
     )
+    val scope = rememberCoroutineScope()
 
     //Open Gallery
     var imageUri by remember {
@@ -236,7 +266,7 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
                     },
                 ) {
                     TextField(
-                        value = valueMon,
+                        value = valueLoaiMon,
                         onValueChange = {},
                         readOnly = true,
                         modifier = Modifier
@@ -291,7 +321,7 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
                                     )
                                 },
                                 onClick = {
-                                    valueMon = item
+                                    valueLoaiMon = item
                                     isExpandedLoaiMon = false
                                 },
                             )
@@ -332,7 +362,7 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
                         ),
                         placeholder = {
                             Text(
-                                text = valueMon,
+                                text = valueLoaiMon,
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily(Font(R.font.cairo_regular)),
                                 style = TextStyle(
@@ -392,8 +422,10 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
                     fontWeight = FontWeight(600)
                 )
                 TextField(
-                    value = "",
-                    onValueChange = {},
+                    value = namePro,
+                    onValueChange = {
+                        namePro = it
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
@@ -422,7 +454,42 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
             }
             SpacerHeightCompose(height = 40)
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    if (bitmap == null || namePro.isEmpty()) {
+                        Toast.makeText(
+                            context,
+                            "Moi nhap thong tin",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        scope.launch {
+                            try {
+                                bitmap?.let { btm ->
+                                    val imagePath = saveBitmapToInternalStorage(
+                                        context,
+                                        btm,
+                                        "product_${System.currentTimeMillis()}"
+                                    )
+                                    viewModel.addMon(
+                                        MonAnModel(
+                                            anhMonAn = imagePath,
+                                            tenMonAn = namePro,
+                                            giaMonAn = valueGia.toInt(),
+                                            tenLoai = valueLoaiMon,
+                                        )
+                                    )
+                                }
+                                navController.popBackStack()
+                            } catch (e: NumberFormatException) {
+                                Toast.makeText(
+                                    context,
+                                    "Moi chon gia", Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                        }
+                    }
+                },
                 modifier = Modifier
                     .width(170.dp)
                     .height(45.dp),
@@ -448,5 +515,5 @@ fun GetLayoutAddMonScreen(navController: NavHostController) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingAddMonScreen() {
-    GetLayoutAddMonScreen(navController = rememberNavController())
+//    GetLayoutAddMonScreen(navController = rememberNavController(), db = db)
 }
