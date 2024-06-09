@@ -7,16 +7,14 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.congntph34559.fpoly.app_com_tam.Model.MonAnModel
-import com.congntph34559.fpoly.app_com_tam.Model.MonAnWithLoaiMon
-
 @Dao
 interface MonAnDAO {
     @Query("SELECT * FROM MonAnModel")
     fun getAll(): List<MonAnModel>
 
-    @Transaction
-    @Query("SELECT * FROM MonAnModel")
-    fun getMonAnWithLoaiMon(): List<MonAnWithLoaiMon>
+//    @Transaction
+//    @Query("SELECT * FROM MonAnModel")
+//    fun getMonAnWithLoaiMon(): List<MonAnWithLoaiMon>
 
     @Query("SELECT * FROM MonAnModel WHERE IdMon = :idMon")
     fun getById(idMon: Int): MonAnModel
