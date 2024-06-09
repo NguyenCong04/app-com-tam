@@ -1,5 +1,6 @@
 package com.congntph34559.fpoly.app_com_tam.ui.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,12 +19,16 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,22 +42,64 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
+import com.congntph34559.fpoly.app_com_tam.DAO.LoginDAO
+import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
 import com.congntph34559.fpoly.app_com_tam.R
+import com.congntph34559.fpoly.app_com_tam.ui.LoginViewModel
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerWidthCompose
 import com.congntph34559.fpoly.app_com_tam.ui.navigation.GetLayoutButtonTopBarNavigation
 import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
+import com.google.android.libraries.mapsplatform.transportation.consumer.model.Route
+
 
 @Composable
-fun GetLayoutLoginScreen(navController: NavHostController) {
-    var context = LocalContext.current
+fun GetLayoutLoginScreen(navController: NavHostController, loginDAO: LoginDAO) {
+    var isShowHidePass by remember {
+        mutableStateOf(false)
+    }
+
+    val loginViewModel = LoginViewModel(loginDAO)
+    loginViewModel.insertSampleAdminIfNeeded()
+
+    val isAuthenticated by loginViewModel.isAuthenticated.observeAsState()
+    val role by loginViewModel.isRole.observeAsState()
+
+    val context = LocalContext.current
+    LaunchedEffect(key1 = isAuthenticated) { when (isAuthenticated) {
+        true -> {
+            Log.d("zzzzzzz", "login: $role")
+            if (role == 0){
+                navController.navigate(ROUTE_MAIN_NAV.home.name) {
+                    popUpTo(ROUTE_MAIN_NAV.login.name) { inclusive = true } }
+            }else{
+                navController.navigate(ROUTE_MAIN_NAV.welcome.name) {
+                    popUpTo(ROUTE_MAIN_NAV.login.name) { inclusive = true } }
+            }
+
+        }
+        false -> {
+            Toast.makeText(context, "Invalid username or password.", Toast.LENGTH_SHORT).show()
+            loginViewModel.resetAuthenticationState() }
+        null -> {} }
+    }
+
+    val usernameState by loginViewModel.username.observeAsState("")
+    val isShowPasswordState by loginViewModel.isShowPassword.observeAsState(false)
+
+    var username by remember { mutableStateOf(usernameState) }
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(isShowPasswordState) }
 
     Column(
         modifier = Modifier
@@ -86,8 +133,8 @@ fun GetLayoutLoginScreen(navController: NavHostController) {
                 fontWeight = FontWeight(600)
             )
             TextField(
-                value = "",
-                onValueChange = {},
+                value = username,
+                onValueChange = { username = it },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
@@ -126,8 +173,8 @@ fun GetLayoutLoginScreen(navController: NavHostController) {
                 fontWeight = FontWeight(600)
             )
             TextField(
-                value = "",
-                onValueChange = {},
+                value = password,
+                onValueChange = { password = it },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
@@ -148,16 +195,33 @@ fun GetLayoutLoginScreen(navController: NavHostController) {
                     )
                 },
                 shape = RoundedCornerShape(size = 8.dp),
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            isShowHidePass = !isShowHidePass
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(
+                                id = if (!isShowHidePass) R.drawable.show
+                                else R.drawable.an
+                            ),
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp, 20.dp)
+                        )
+                    }
+                },
+                visualTransformation = if (!isShowHidePass) PasswordVisualTransformation()
+                else VisualTransformation.None,
                 textStyle = TextStyle(
                     fontFamily = FontFamily(Font(R.font.cairo_regular))
                 )
-
             )
         }
 
         SpacerHeightCompose(height = 30)
         Button(
-            onClick = { navController.navigate("home") },
+            onClick = {  loginViewModel.login(username, password) },
             modifier = Modifier
                 .width(170.dp)
                 .height(45.dp),
@@ -196,5 +260,8 @@ fun GetLayoutLoginScreen(navController: NavHostController) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingLayoutLogin() {
-    GetLayoutLoginScreen(navController = rememberNavController())
+    val context = LocalContext.current
+    val loginDAO = Room.databaseBuilder(context, AppDatabase::class.java, "app-database").build().LoginDAO()
+    GetLayoutLoginScreen(navController = rememberNavController(), loginDAO = loginDAO)
 }
+
