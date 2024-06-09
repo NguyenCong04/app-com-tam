@@ -2,6 +2,8 @@
 
 package com.congntph34559.fpoly.app_com_tam.ui.screens.dish
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,8 +11,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +22,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,25 +40,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.ImagePainter.State.Empty.painter
+import coil.compose.rememberImagePainter
+import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
+import com.congntph34559.fpoly.app_com_tam.Model.MonAnModel
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerWidthCompose
 import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
+import java.io.File
 
-
-class MonDTO(var id: Int, var image: Int, var nameMon: String, var price: Float)
-
-var listMon = mutableListOf<MonDTO>(
-    MonDTO(1, R.drawable.image_demo, "Sườn bì", 25f),
-    MonDTO(2, R.drawable.image_demo, "Bì chả", 15f),
-    MonDTO(3, R.drawable.image_demo, "Trứng chả", 20f),
-    MonDTO(4, R.drawable.image_demo, "Sườn bì chả", 35f),
-)
 
 @Composable
-fun GetLayoutListMonUpdateScreen(navController: NavHostController) {
+fun GetLayoutListMonUpdateScreen(
+    navController: NavHostController,
+    db: AppDatabase
+) {
     var content = LocalContext.current
+    val monAnDAO = db.monAnDAO()
+    var listMon by remember {
+        mutableStateOf(monAnDAO.getAll())
+    }
     ScaffoldCompose(onClickBack = {
         navController.popBackStack()
     }) {
@@ -68,9 +80,15 @@ fun GetLayoutListMonUpdateScreen(navController: NavHostController) {
             ) {
                 items(listMon) {
                     PostItemMon(
-                        iconDelete = false, iconUpdate = true, it,
+                        iconDelete = false,
+                        iconUpdate = true,
+                        it,
                         onClickIconUpdate = {
-                            navController.navigate(ROUTE_MAIN_NAV.updateMon.name)
+                            navController.navigate(
+                                "${
+                                    ROUTE_MAIN_NAV.updateMon.name
+                                }/${it.IdMon}"
+                            )
                         }, onClickIconDelete = null
                     )
                 }
@@ -84,7 +102,7 @@ fun GetLayoutListMonUpdateScreen(navController: NavHostController) {
 fun PostItemMon(
     iconDelete: Boolean,
     iconUpdate: Boolean,
-    monDTO: MonDTO,
+    monDTO: MonAnModel,
     onClickIconUpdate: (() -> Unit)?,
     onClickIconDelete: (() -> Unit)?
 ) {
@@ -113,30 +131,33 @@ fun PostItemMon(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = monDTO.id.toString(),
+                    text = monDTO.IdMon.toString(),
                     color = Color.White,
                     fontFamily = FontFamily(Font(R.font.cairo_regular))
                 )
                 SpacerWidthCompose(width = 15)
+//                val painter = rememberImagePainter(data = Uri.parse(monDTO.anhMonAn))
+                val painter =
+                    rememberImagePainter(data = File(monDTO.anhMonAn.toString()))
                 Image(
-                    painter = painterResource(id = monDTO.image),
+                    painter = painter,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(60.dp, 60.dp)
+                        .size(70.dp)
                         .clip(
                             shape =
-                            RoundedCornerShape(20.dp)
+                            RoundedCornerShape(15.dp)
                         )
                 )
                 SpacerWidthCompose(width = 20)
                 Column() {
                     Text(
-                        text = monDTO.nameMon,
+                        text = monDTO.tenMonAn.toString(),
                         color = Color.White,
                         fontFamily = FontFamily(Font(R.font.cairo_regular))
                     )
                     Text(
-                        text = "${monDTO.price}K",
+                        text = "${monDTO.giaMonAn}K",
                         color = Color(0xffFE724C),
                         fontFamily = FontFamily(Font(R.font.cairo_regular))
                     )
@@ -169,5 +190,8 @@ fun PostItemMon(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun GreetingGetLayoutListMonUpdateScreen() {
-    GetLayoutListMonUpdateScreen(navController = rememberNavController())
+//    GetLayoutListMonUpdateScreen(
+//        navController = rememberNavController(),
+//
+//    )
 }

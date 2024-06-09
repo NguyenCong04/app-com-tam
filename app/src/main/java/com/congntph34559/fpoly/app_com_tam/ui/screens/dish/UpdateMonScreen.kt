@@ -5,6 +5,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -35,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +45,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -52,15 +53,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberImagePainter
+import com.congntph34559.fpoly.app_com_tam.Model.MonAnModel
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
+import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE
+import kotlinx.coroutines.launch
+import java.io.File
+import kotlin.math.log
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GetLayoutUpdateMonScreen(navController: NavHostController) {
+fun GetLayoutUpdateMonScreen(
+    navController: NavHostController,
+    viewModel: MonAnViewModel,
+    id: Int?
+) {
+
+    var monDTO: MonAnModel? = null
+
+    if (id != null) {
+        monDTO = viewModel.getById(id)
+    }
+
+
     var isExpandedLoaiMon by remember {
         mutableStateOf(false)
     }
@@ -68,19 +86,30 @@ fun GetLayoutUpdateMonScreen(navController: NavHostController) {
         mutableStateOf(false)
     }
     var valueGia by remember {
-        mutableStateOf("5 - 15")
+        mutableStateOf(monDTO?.giaMonAn?.toString() ?: "")
     }
     var valueMon by remember {
-        mutableStateOf("Món chính")
+        mutableStateOf(monDTO?.tenLoai ?: "")
     }
+    var tenMon by remember {
+        mutableStateOf(monDTO?.tenMonAn ?: "")
+    }
+    var imageMon by remember {
+        mutableStateOf(monDTO?.anhMonAn ?: "")
+    }
+
     var listLoaiMon = listOf<String>(
         "Món chính",
         "Món phụ"
     )
     var listGia = listOf<String>(
-        "5 - 15",
-        "15 - 30"
+        "15",
+        "25",
+        "40",
+        "50",
     )
+    val scope = rememberCoroutineScope()
+
     //Open Gallery
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
@@ -95,7 +124,6 @@ fun GetLayoutUpdateMonScreen(navController: NavHostController) {
     ) { uri: Uri? ->
         imageUri = uri
     }
-
 
 
 
@@ -135,48 +163,49 @@ fun GetLayoutUpdateMonScreen(navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-
-//                Image(
-//                    painter = painterResource(id = R.drawable.image_demo),
-//                    contentDescription = null,
-//                    modifier = Modifier
-//                        .width(145.dp)
-//                        .clip(
-//                            shape = RoundedCornerShape(8.dp)
-//                        ),
-//                    contentScale = ContentScale.Crop,
-//                )
-                imageUri?.let {
-                    if (Build.VERSION.SDK_INT < 28) {
-                        bitmap = MediaStore.Images.Media.getBitmap(
-                            context
-                                .contentResolver, it
-                        )
-                    } else {
-                        val source = ImageDecoder.createSource(
-                            context
-                                .contentResolver, it
-                        )
-                        bitmap = ImageDecoder.decodeBitmap(source)
-                    }
-                    bitmap?.let { btm ->
-                        Image(
-                            bitmap = btm.asImageBitmap(),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .width(145.dp)
-                                .height(145.dp)
-                                .clip(
-                                    shape = RoundedCornerShape(8.dp)
-                                ),
-                            contentScale = ContentScale.Crop,
-                        )
+                if (bitmap == null && imageUri == null) {
+                    val painter =
+                        rememberImagePainter(data = File(imageMon))
+                    Image(
+                        painter = painter,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(145.dp)
+                            .clip(
+                                shape = RoundedCornerShape(8.dp)
+                            ),
+                        contentScale = ContentScale.Crop,
+                    )
+                } else {
+                    imageUri?.let {
+                        if (Build.VERSION.SDK_INT < 28) {
+                            bitmap = MediaStore.Images.Media.getBitmap(
+                                context
+                                    .contentResolver, it
+                            )
+                        } else {
+                            val source = ImageDecoder.createSource(
+                                context
+                                    .contentResolver, it
+                            )
+                            bitmap = ImageDecoder.decodeBitmap(source)
+                        }
+                        bitmap?.let { btm ->
+                            Image(
+                                bitmap = btm.asImageBitmap(),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .width(145.dp)
+                                    .height(145.dp)
+                                    .clip(
+                                        shape = RoundedCornerShape(8.dp)
+                                    ),
+                                contentScale = ContentScale.Crop,
+                            )
+                        }
                     }
                 }
             }
-
-
-
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -353,8 +382,10 @@ fun GetLayoutUpdateMonScreen(navController: NavHostController) {
                     fontWeight = FontWeight(600)
                 )
                 TextField(
-                    value = "",
-                    onValueChange = {},
+                    value = tenMon,
+                    onValueChange = {
+                        tenMon = it
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
@@ -383,7 +414,26 @@ fun GetLayoutUpdateMonScreen(navController: NavHostController) {
             }
             SpacerHeightCompose(height = 40)
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    var imagePath: String? = null
+                    bitmap?.let { btm ->
+                        imagePath = saveBitmapToInternalStorage(
+                            context,
+                            btm,
+                            "product_${System.currentTimeMillis()}"
+                        )
+
+                    }
+                    monDTO?.let {
+                        it.tenMonAn = tenMon
+                        it.tenLoai = valueMon
+                        it.giaMonAn = valueGia.toInt()
+                        it.anhMonAn = if (bitmap == null && imageUri == null)
+                            imageMon else imagePath
+                        viewModel.update(it)
+                        navController.popBackStack()
+                    }
+                },
                 modifier = Modifier
                     .width(170.dp)
                     .height(45.dp),
@@ -408,5 +458,5 @@ fun GetLayoutUpdateMonScreen(navController: NavHostController) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingUpdateMonScreen() {
-    GetLayoutUpdateMonScreen(navController = rememberNavController())
+//    GetLayoutUpdateMonScreen(navController = rememberNavController(), db = db)
 }

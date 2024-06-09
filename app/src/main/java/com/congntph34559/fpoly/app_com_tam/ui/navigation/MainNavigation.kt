@@ -2,9 +2,12 @@ package com.congntph34559.fpoly.app_com_tam.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutAddCategoriesScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutAddMonScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutDeleteCategoriesScreen
@@ -16,6 +19,7 @@ import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutLoginScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutRegisterScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutUpdateCategoriesScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutUpdateMonScreen
+import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.MonAnViewModel
 import com.congntph34559.fpoly.app_com_tam.ui.screens.welcome.GetLayoutWelcome
 
 enum class ROUTE_MAIN_NAV {
@@ -35,7 +39,7 @@ enum class ROUTE_MAIN_NAV {
 }
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(db: AppDatabase) {
     var navController = rememberNavController()
 
     NavHost(
@@ -81,16 +85,28 @@ fun AppNavigation() {
         }
 
         composable(ROUTE_MAIN_NAV.addMon.name) {
-            GetLayoutAddMonScreen(navController)
+            GetLayoutAddMonScreen(navController, MonAnViewModel(db))
         }
-        composable(ROUTE_MAIN_NAV.updateMon.name) {
-            GetLayoutUpdateMonScreen(navController)
+        composable(
+            "${ROUTE_MAIN_NAV.updateMon.name}/{id}",
+            arguments = listOf(
+                navArgument("id"){
+                    type = NavType.IntType
+                }
+            )
+        ) {backStackEntry->
+            GetLayoutUpdateMonScreen(
+                navController,
+                MonAnViewModel(db),
+                backStackEntry.arguments?.getInt("id",0)
+            )
+
         }
         composable(ROUTE_MAIN_NAV.listMonUpdate.name) {
-            GetLayoutListMonUpdateScreen(navController)
+            GetLayoutListMonUpdateScreen(navController, db)
         }
         composable(ROUTE_MAIN_NAV.listMonDelete.name) {
-            GetLayoutListMonDelete(navController)
+            GetLayoutListMonDelete(navController, db)
         }
     }
 
