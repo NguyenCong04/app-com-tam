@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class OrderModel(
-    @PrimaryKey(autoGenerate = true) var IdOrder: Int = 0,
-    @ColumnInfo(name = "customerName") var customerName: String?,
-    @ColumnInfo(name = "orderDate") var orderDate: String?,
-    @ColumnInfo(name = "totalAmount") var totalAmount: Double?
-)
+    @PrimaryKey(autoGenerate = true) var IdOrder: Int=0,
+    @ColumnInfo(name = "tenDonhang") var tenDonhang: String?,
+    @ColumnInfo(name = "price") var price: Float?,
+    @ColumnInfo(name = "status") var status: Boolean = false
+    )

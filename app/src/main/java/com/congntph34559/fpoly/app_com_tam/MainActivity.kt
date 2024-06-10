@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
         ).allowMainThreadQueries().build()
         setContent {
             AppNavigation(db)
+
         }
     }
 }

@@ -13,10 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.fontResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,23 +25,26 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberImagePainter
+import com.congntph34559.fpoly.app_com_tam.Model.MonAnModel
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
 
-data class FoodItem(val id: String, val name: String, val price: String, val quantity: String)
 
 @Composable
 fun GetLayoutDetailDonHang(navController: NavHostController) {
     val context = LocalContext.current
     val mainDishes = listOf(
-        FoodItem("1", "Sườn bì", "56k", "02"),
-        FoodItem("2", "Bì trứng", "56k", "02"),
-        FoodItem("3", "Bì chả", "56k", "02")
-    )
+        MonAnModel(1,"https://beptueu.vn/hinhanh/tintuc/top-15-hinh-anh-mon-an-ngon-viet-nam-khien-ban-khong-the-roi-mat-1.jpg", "Sườn bì", 56000, "02"),
+        MonAnModel(2,"https://beptueu.vn/hinhanh/tintuc/top-15-hinh-anh-mon-an-ngon-viet-nam-khien-ban-khong-the-roi-mat-1.jpg", "Sườn bì", 56000, "02"),
+        MonAnModel(3,"https://beptueu.vn/hinhanh/tintuc/top-15-hinh-anh-mon-an-ngon-viet-nam-khien-ban-khong-the-roi-mat-1.jpg", "Sườn bì", 56000, "02"),
+
+
+        )
     val toppings = listOf(
-        FoodItem("1", "Bì chả", "56k", "02"),
-        FoodItem("2", "Bì chả", "56k", "02")
+        MonAnModel(1,"https://beptueu.vn/hinhanh/tintuc/top-15-hinh-anh-mon-an-ngon-viet-nam-khien-ban-khong-the-roi-mat-1.jpg", "Sườn bì", 56000, "02"),
+        MonAnModel(2,"https://beptueu.vn/hinhanh/tintuc/top-15-hinh-anh-mon-an-ngon-viet-nam-khien-ban-khong-the-roi-mat-1.jpg", "Sườn bì", 56000, "02"),
     )
 
     ScaffoldCompose(onClickBack = {
@@ -198,7 +201,7 @@ fun GetLayoutDetailDonHang(navController: NavHostController) {
 }
 
 @Composable
-fun FoodItemRow(foodItem: FoodItem) {
+fun FoodItemRow(foodItem: MonAnModel) {
     Row(
         modifier = Modifier
             .width(366.dp)
@@ -213,38 +216,42 @@ fun FoodItemRow(foodItem: FoodItem) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = foodItem.id,
+                text = "${foodItem.IdMon}",
                 modifier = Modifier.padding(end = 16.dp),
                 color = Color.White,
                 fontFamily = FontFamily(Font(R.font.cairo_bold))
             )
             Image(
-                painter = painterResource(id = R.drawable.mon_an_1),
+                painter = rememberImagePainter(data = foodItem.anhMonAn),
                 contentDescription = null,
                 modifier = Modifier
                     .size(60.dp, 60.dp)
                     .offset(x = 10.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                ,
+                contentScale = ContentScale.Crop
             )
+
         }
         Column(
-            modifier = Modifier.padding(15.dp, end = 125.dp),
+            modifier = Modifier.padding(35.dp, end = 125.dp),
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = foodItem.name,
+                text = "${foodItem.tenMonAn}",
                 color = Color.White,
                 fontFamily = FontFamily(Font(R.font.cairo_bold))
 
             )
             Text(
-                text = foodItem.price,
+                text = "${foodItem.giaMonAn}",
                 color = Color("#e46948".toColorInt()),
                 fontFamily = FontFamily(Font(R.font.cairo_bold))
 
             )
         }
         Text(
-            text = foodItem.quantity,
+            text = "${foodItem.tenLoai}",
             modifier = Modifier.padding(16.dp),
             color = Color.White,
             fontFamily = FontFamily(Font(R.font.cairo_bold))

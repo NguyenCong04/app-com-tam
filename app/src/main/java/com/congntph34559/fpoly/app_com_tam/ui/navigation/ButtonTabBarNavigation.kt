@@ -32,10 +32,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.SpacerHeightCompose
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutHoiTroScreen
@@ -44,6 +46,7 @@ import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutManagerMonSc
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutQuanLyCategoriesScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutQuanLyScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutThongKeScreen
+import com.congntph34559.fpoly.app_com_tam.ui.screens.dishorder.YourViewModel
 
 enum class ROUTE {
     home,
@@ -57,7 +60,7 @@ enum class ROUTE {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GetLayoutButtonTopBarNavigation(navHostController: NavHostController) {
+fun GetLayoutButtonTopBarNavigation(navHostController: NavHostController, db: AppDatabase) {
     var isSelected by rememberSaveable {
         mutableStateOf(ROUTE.home.name)
     }
@@ -252,7 +255,7 @@ fun GetLayoutButtonTopBarNavigation(navHostController: NavHostController) {
             ) {
                 composable(ROUTE.home.name) {
                     GetLayoutHomeScreen(
-                        navHostController
+                        navHostController, viewModel = YourViewModel(db)
                     )
                 }
                 composable(ROUTE.thongke.name) { GetLayoutThongKeScreen() }
@@ -277,5 +280,5 @@ fun GetLayoutButtonTopBarNavigation(navHostController: NavHostController) {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun GreetingLayoutButtonTopBarNavigation() {
-    GetLayoutButtonTopBarNavigation(navHostController = rememberNavController())
+//    GetLayoutButtonTopBarNavigation(navHostController = rememberNavController(), db = db)
 }

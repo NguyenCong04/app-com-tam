@@ -54,9 +54,9 @@ fun AppNavigation(db: AppDatabase) {
             )
         }
         composable(ROUTE_MAIN_NAV.login.name) {
-            val context = LocalContext.current
-            val loginDAO = Room.databaseBuilder(context, AppDatabase::class.java, "app-database").build().LoginDAO()
-            GetLayoutLoginScreen(navController = navController, loginDAO = loginDAO)
+//            val context = LocalContext.current
+//            val loginDAO = Room.databaseBuilder(context, AppDatabase::class.java, "app-database").build().LoginDAO()
+            GetLayoutLoginScreen(navController = navController, loginDAO = db)
         }
 
         composable(ROUTE_MAIN_NAV.register.name) {
@@ -66,7 +66,7 @@ fun AppNavigation(db: AppDatabase) {
         }
         composable(ROUTE_MAIN_NAV.home.name) {
             GetLayoutButtonTopBarNavigation(
-                navController
+                navController,db
             )
         }
         composable(ROUTE_MAIN_NAV.detail.name) {
