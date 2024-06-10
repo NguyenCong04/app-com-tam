@@ -80,6 +80,8 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
     implementation ("androidx.compose.runtime:runtime-livedata:1.2.1")
     implementation("androidx.room:room-ktx:$room_version")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+
 
 
 }

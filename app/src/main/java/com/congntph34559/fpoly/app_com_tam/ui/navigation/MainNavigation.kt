@@ -10,7 +10,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
 import androidx.room.Room
-import androidx.navigation.navArgument
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutAddCategoriesScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutAddMonScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutDeleteCategoriesScreen
@@ -55,9 +54,9 @@ fun AppNavigation(db: AppDatabase) {
             )
         }
         composable(ROUTE_MAIN_NAV.login.name) {
-            val context = LocalContext.current
-            val loginDAO = Room.databaseBuilder(context, AppDatabase::class.java, "app-database").build().LoginDAO()
-            GetLayoutLoginScreen(navController = navController, loginDAO = loginDAO)
+//            val context = LocalContext.current
+//            val loginDAO = Room.databaseBuilder(context, AppDatabase::class.java, "app-database").build().LoginDAO()
+            GetLayoutLoginScreen(navController = navController, loginDAO = db)
         }
 
         composable(ROUTE_MAIN_NAV.register.name) {
@@ -67,7 +66,7 @@ fun AppNavigation(db: AppDatabase) {
         }
         composable(ROUTE_MAIN_NAV.home.name) {
             GetLayoutButtonTopBarNavigation(
-                navController
+                navController,db
             )
         }
         composable(ROUTE_MAIN_NAV.detail.name) {

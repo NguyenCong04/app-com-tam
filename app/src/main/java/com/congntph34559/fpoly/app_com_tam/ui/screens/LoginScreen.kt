@@ -64,12 +64,12 @@ import com.google.android.libraries.mapsplatform.transportation.consumer.model.R
 
 
 @Composable
-fun GetLayoutLoginScreen(navController: NavHostController, loginDAO: LoginDAO) {
+fun GetLayoutLoginScreen(navController: NavHostController, loginDAO: AppDatabase) {
     var isShowHidePass by remember {
         mutableStateOf(false)
     }
 
-    val loginViewModel = LoginViewModel(loginDAO)
+    val loginViewModel = LoginViewModel(loginDAO.LoginDAO())
     loginViewModel.insertSampleAdminIfNeeded()
 
     val isAuthenticated by loginViewModel.isAuthenticated.observeAsState()
@@ -261,7 +261,7 @@ fun GetLayoutLoginScreen(navController: NavHostController, loginDAO: LoginDAO) {
 @Composable
 fun GreetingLayoutLogin() {
     val context = LocalContext.current
-    val loginDAO = Room.databaseBuilder(context, AppDatabase::class.java, "app-database").build().LoginDAO()
-    GetLayoutLoginScreen(navController = rememberNavController(), loginDAO = loginDAO)
+//    val loginDAO = Room.databaseBuilder(context, AppDatabase::class.java, "app-database").build().LoginDAO()
+//    GetLayoutLoginScreen(navController = rememberNavController(), loginDAO = loginDAO)
 }
 
