@@ -98,10 +98,16 @@ fun GetLayoutUpdateMonScreen(
         mutableStateOf(monDTO?.anhMonAn ?: "")
     }
 
-    var listLoaiMon = listOf<String>(
-        "Món chính",
-        "Món phụ"
-    )
+//    var listLoaiMon = listOf<String>(
+//        "Món chính",
+//        "Món phụ"
+//    )
+    var listLoaiMon by remember {
+        mutableStateOf(
+            viewModel.getListLoaiMon()
+        )
+    }
+
     var listGia = listOf<String>(
         "15",
         "25",
@@ -271,16 +277,16 @@ fun GetLayoutUpdateMonScreen(
                             .padding(10.dp)
                             .fillMaxWidth(0.92f),
                     ) {
-                        listLoaiMon.forEach { item ->
+                        listLoaiMon?.forEach { item ->
                             DropdownMenuItem(
                                 text = {
                                     Text(
-                                        text = item,
+                                        text = item.tenLoaiMon!!,
                                         fontFamily = FontFamily(Font(R.font.cairo_regular))
                                     )
                                 },
                                 onClick = {
-                                    valueMon = item
+                                    valueMon = item.tenLoaiMon!!
                                     isExpandedLoaiMon = false
                                 },
                             )
@@ -432,6 +438,11 @@ fun GetLayoutUpdateMonScreen(
                             imageMon else imagePath
                         viewModel.update(it)
                         navController.popBackStack()
+                        Toast.makeText(
+                            context,
+                            "Sua thanh cong",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 },
                 modifier = Modifier

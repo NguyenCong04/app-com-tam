@@ -6,6 +6,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -124,7 +125,7 @@ fun GetLayoutAddMonScreen(
         mutableStateOf(false)
     }
     var valueLoaiMon by remember {
-        mutableStateOf("Món chính")
+        mutableStateOf("Mời chọn loại món")
     }
     var namePro by remember {
         mutableStateOf("")
@@ -132,10 +133,17 @@ fun GetLayoutAddMonScreen(
     var valueGia by remember {
         mutableStateOf("15 - 50")
     }
-    var listLoaiMon = listOf<String>(
-        "Món chính",
-        "Món phụ"
-    )
+//    var listLoaiMon = listOf<String>(
+//        "Món chính",
+//        "Món phụ"
+//    )
+
+    var listLoaiMon by remember {
+        mutableStateOf(
+            viewModel.getListLoaiMon()
+        )
+    }
+
     var listGia = listOf<String>(
         "15",
         "25",
@@ -312,16 +320,16 @@ fun GetLayoutAddMonScreen(
                             .padding(10.dp)
                             .fillMaxWidth(0.92f),
                     ) {
-                        listLoaiMon.forEach { item ->
+                        listLoaiMon?.forEach { item ->
                             DropdownMenuItem(
                                 text = {
                                     Text(
-                                        text = item,
+                                        text = item.tenLoaiMon!!,
                                         fontFamily = FontFamily(Font(R.font.cairo_regular))
                                     )
                                 },
                                 onClick = {
-                                    valueLoaiMon = item
+                                    valueLoaiMon = item.tenLoaiMon!!
                                     isExpandedLoaiMon = false
                                 },
                             )
@@ -455,7 +463,11 @@ fun GetLayoutAddMonScreen(
             SpacerHeightCompose(height = 40)
             Button(
                 onClick = {
-                    if (bitmap == null || namePro.isEmpty()) {
+                    if (bitmap == null ||
+                        namePro.isEmpty() ||
+                        listLoaiMon == null ||
+                        valueLoaiMon == "Mời chọn loại món"
+                    ) {
                         Toast.makeText(
                             context,
                             "Moi nhap thong tin",
@@ -480,6 +492,11 @@ fun GetLayoutAddMonScreen(
                                     )
                                 }
                                 navController.popBackStack()
+                                Toast.makeText(
+                                    context,
+                                    "Them thanh cong",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             } catch (e: NumberFormatException) {
                                 Toast.makeText(
                                     context,
