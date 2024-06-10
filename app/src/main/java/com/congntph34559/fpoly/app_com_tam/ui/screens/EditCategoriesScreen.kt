@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
 import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
 import com.congntph34559.fpoly.app_com_tam.Model.LoaiMonModel
 import com.congntph34559.fpoly.app_com_tam.R
@@ -45,13 +44,9 @@ import com.congntph34559.fpoly.app_com_tam.ui.navigation.ROUTE_MAIN_NAV
 
 
 @Composable
-fun GetLayoutEditCategoriesScreen(navController: NavHostController) {
+fun GetLayoutEditCategoriesScreen(navController: NavHostController, db: AppDatabase) {
     var context = LocalContext.current
-    var db = Room.databaseBuilder(
-        context,
-        AppDatabase::class.java,
-        "Loaimon"
-    ).allowMainThreadQueries().build()
+
     var list_loaiMon by remember {
         mutableStateOf(db.loaiMonDAO().getAll())
     }
@@ -179,5 +174,5 @@ fun CategoryList(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingLayoutEditCategoriesScreen() {
-    GetLayoutEditCategoriesScreen(navController = rememberNavController())
+  //  GetLayoutEditCategoriesScreen(navController = rememberNavController(), db = db)
 }

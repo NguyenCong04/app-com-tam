@@ -17,20 +17,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
 import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
 import com.congntph34559.fpoly.app_com_tam.Model.LoaiMonModel
 import com.congntph34559.fpoly.app_com_tam.ui.compose.DialogCompose
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 
 @Composable
-fun GetLayoutDeleteCategoriesScreen(navController: NavHostController) {
+fun GetLayoutDeleteCategoriesScreen(navController: NavHostController, db: AppDatabase) {
     var context = LocalContext.current
-    var db = Room.databaseBuilder(
-        context,
-        AppDatabase::class.java,
-        "Loaimon"
-    ).allowMainThreadQueries().build()
+
     var list_loaiMon by remember {
         mutableStateOf(db.loaiMonDAO().getAll())
     }
@@ -93,5 +88,5 @@ fun GetLayoutDeleteCategoriesScreen(navController: NavHostController) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingLayoutDeleteCategoriesScreen() {
-    GetLayoutDeleteCategoriesScreen(navController = rememberNavController())
+   // GetLayoutDeleteCategoriesScreen(navController = rememberNavController(), db = db)
 }

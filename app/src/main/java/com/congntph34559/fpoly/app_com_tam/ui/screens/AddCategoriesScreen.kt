@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -36,20 +34,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
 import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
 import com.congntph34559.fpoly.app_com_tam.Model.LoaiMonModel
 import com.congntph34559.fpoly.app_com_tam.R
 import com.congntph34559.fpoly.app_com_tam.ui.compose.ScaffoldCompose
 
 @Composable
-fun GetLayoutAddCategoriesScreen(navController: NavHostController) {
+fun GetLayoutAddCategoriesScreen(navController: NavHostController, db: AppDatabase) {
     var context = LocalContext.current
-    var db = Room.databaseBuilder(
-        context,
-        AppDatabase::class.java,
-        "Loaimon"
-    ).allowMainThreadQueries().build()
+
     var tenLoaiMon by remember {
         mutableStateOf("")
     }
@@ -102,9 +95,13 @@ fun GetLayoutAddCategoriesScreen(navController: NavHostController) {
 Spacer(modifier = Modifier.fillMaxHeight(0.3f))
             Button(
                 onClick = {
-                  if(
-                      tenLoaiMon.isNotBlank()
-                  ){
+                    if ( tenLoaiMon.isEmpty()) {
+                        Toast.makeText(
+                            context,
+                            "Moi nhap thong tin",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }else{
                       db.loaiMonDAO().insert(
                           LoaiMonModel(
                               tenLoaiMon=tenLoaiMon
@@ -112,7 +109,7 @@ Spacer(modifier = Modifier.fillMaxHeight(0.3f))
                       )
                       Toast.makeText(context,"Thêm loại món thành công", Toast.LENGTH_SHORT
                       ).show()
-                   //   navController.navigate("detail_ql_loai_mon")
+                      navController.popBackStack()
                   }
                 },
                 modifier = Modifier.size(170.dp, 50.dp),
@@ -138,5 +135,5 @@ Spacer(modifier = Modifier.fillMaxHeight(0.3f))
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingLayoutAddCategoriesScreen() {
-    GetLayoutAddCategoriesScreen(navController = rememberNavController())
+ //   GetLayoutAddCategoriesScreen(navController = rememberNavController(), db = db)
 }

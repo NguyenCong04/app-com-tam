@@ -10,7 +10,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.congntph34559.fpoly.app_com_tam.DBHelper.AppDatabase
 import androidx.room.Room
-import androidx.navigation.navArgument
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutAddCategoriesScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.dish.GetLayoutAddMonScreen
 import com.congntph34559.fpoly.app_com_tam.ui.screens.GetLayoutDeleteCategoriesScreen
@@ -76,13 +75,14 @@ fun AppNavigation(db: AppDatabase) {
             )
         }
         composable(ROUTE_MAIN_NAV.addCategory.name) {
-            GetLayoutAddCategoriesScreen(navController)
+            GetLayoutAddCategoriesScreen(navController,db)
+
         }
         composable(ROUTE_MAIN_NAV.listCategoryUpdate.name) {
-            GetLayoutEditCategoriesScreen(navController)
+            GetLayoutEditCategoriesScreen(navController,db)
         }
         composable(ROUTE_MAIN_NAV.listCategoryDelete.name) {
-            GetLayoutDeleteCategoriesScreen(navController)
+            GetLayoutDeleteCategoriesScreen(navController,db)
         }
         composable(
 
@@ -96,7 +96,7 @@ fun AppNavigation(db: AppDatabase) {
         {backStackEntry->
             GetLayoutUpdateCategoriesScreen(
                 navController,
-                backStackEntry.arguments?.getInt("IdLoaiMon",0)
+                backStackEntry.arguments?.getInt("IdLoaiMon",0),db
             )
         }
 
